@@ -71,8 +71,10 @@ AI_PenTest_Agent/
 ### Installation
 
 ```bash
-git clone https://github.com/yourusername/AI-PenTest-Agents.git
+git clone https://github.com/A7med-Elgo7ary/Genius-Penetration.git
 cd AI-PenTest-Agents
+python -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env  # Configure API keys in .env file
 ```
