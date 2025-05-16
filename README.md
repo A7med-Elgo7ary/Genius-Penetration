@@ -72,7 +72,7 @@ AI_PenTest_Agent/
 
 ```bash
 git clone https://github.com/A7med-Elgo7ary/Genius-Penetration.git
-cd AI-PenTest-Agents
+cd Genius-Penetration
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
