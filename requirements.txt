@@ -1,0 +1,40 @@
+# Core dependencies
+numpy
+pandas
+scikit-learn
+tensorflow
+torch
+transformers
+gensim
+
+# AI and LLM
+google-generativeai
+
+# Web and API
+requests
+beautifulsoup4
+fastapi
+uvicorn
+
+# Network scanning and DNS tools
+python-nmap>=0.7.1
+dnspython>=2.6.0
+
+# Security tools interfaces
+pyyaml>=6.0.1
+
+# Database
+sqlalchemy
+pymongo
+
+# Utilities
+python-dotenv>=1.0.0
+colorlog>=6.8.0
+streamlit
+grpcio
+pyzmq
+
+# Reporting
+jinja2>=3.1.0
+reportlab
+markdown>=3.6.0

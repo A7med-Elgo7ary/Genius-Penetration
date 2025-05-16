@@ -1,0 +1,70 @@
+general:
+  log_level: INFO
+  output_dir: "./output"
+  threads: 4
+  timeout: 300
+
+agents:
+  coordinator:
+    controller_type: "llm"  # Options: "llm", "rl"
+    communication_protocol: "grpc"  # Options: "grpc", "zeromq"
+  
+  reconnaissance:
+    shodan_scan: true
+    sublist3r: true
+    whois_lookup: true
+    dns_lookup: true
+    theHarvester: true
+    max_depth: 2
+  
+  vulnerability_scanner:
+    nmap: true
+    zap: true
+    sqlmap: true
+    nuclei: true
+    wpscan: true
+    dirb_gobuster: true
+    scan_timeout: 3600
+  
+  vulnerability_analysis:
+    use_ml_model: true
+    cve_lookup: true
+    severity_threshold: "medium"
+  
+  exploitation:
+    metasploit: true
+    commix: true
+    searchsploit: true
+    max_attempts: 3
+    safe_mode: true
+  
+  post_exploitation:
+    gather_credentials: true
+    gather_system_info: true
+    persistence: false
+    max_depth: 1
+  
+  blue_team:
+    monitor_interval: 5
+    yara_scan: true
+    anomaly_detection: true
+    auto_response: false
+  
+  reporting:
+    formats:
+      - json
+      - html
+      - pdf
+    include_screenshots: true
+    redact_sensitive: true
+
+api:
+  enabled: true
+  host: "127.0.0.1"
+  port: 8000
+  require_auth: true
+
+database:
+  type: "sqlite"  # Options: "sqlite", "mongodb"
+  path: "./db/pentest.db"
+  # mongodb_uri: "mongodb://localhost:27017/"

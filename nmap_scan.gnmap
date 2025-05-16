@@ -1,0 +1,4 @@
+# Nmap 7.95 scan initiated Fri May 16 05:32:31 2025 as: /usr/lib/nmap/nmap --privileged -sV -sC -oA nmap_scan 178.79.134.182
+Host: 178.79.134.182 (178-79-134-182.ip.linodeusercontent.com)	Status: Up
+Host: 178.79.134.182 (178-79-134-182.ip.linodeusercontent.com)	Ports: 53/open/tcp//tcpwrapped///, 80/open/tcp//tcpwrapped///, 81/open/tcp//tcpwrapped///, 443/open/tcp//tcpwrapped///, 4445/open/tcp//tcpwrapped///, 9000/open/tcp//tcpwrapped///	Ignored State: filtered (994)
+# Nmap done at Fri May 16 05:33:21 2025 -- 1 IP address (1 host up) scanned in 49.99 seconds
