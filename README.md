@@ -120,7 +120,7 @@ MIT License – see [LICENSE](LICENSE)
 ---
 
 ## 👥 Authors
- - ""Ahmed Elgohary""
+ - Ahmed Elgohary
  - Ahmed Gamal
  - Mohamed Nasser
  - Nada Mossa
@@ -131,6 +131,10 @@ MIT License – see [LICENSE](LICENSE)
 ## 💬 Contact
 
 Have feedback, suggestions, or want to collaborate? Reach out via:
+
+Email:
+LinkedIn: 
+Twitter:
 
 
 ---
