@@ -120,11 +120,11 @@ MIT License – see [LICENSE](LICENSE)
 ---
 
 ## 👥 Authors
- - Ahmed Elgohary
+ - ""Ahmed Elgohary""
  - Ahmed Gamal
  - Mohamed Nasser
  - Nada Mossa
- - Rana Mohamed 
+ - Rana Mahmoud
 
 ---
 
