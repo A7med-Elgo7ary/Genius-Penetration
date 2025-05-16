@@ -1,21 +1,96 @@
-# Nmap 7.95 scan initiated Fri May 16 05:32:31 2025 as: /usr/lib/nmap/nmap --privileged -sV -sC -oA nmap_scan 178.79.134.182
+# Nmap 7.95 scan initiated Fri May 16 08:59:11 2025 as: /usr/lib/nmap/nmap --privileged -sV -sC -oA nmap_scan 178.79.134.182 pentest-ground.com
 Nmap scan report for 178-79-134-182.ip.linodeusercontent.com (178.79.134.182)
-Host is up (0.026s latency).
+Host is up (0.031s latency).
 Not shown: 994 filtered tcp ports (no-response)
-PORT     STATE SERVICE    VERSION
-53/tcp   open  tcpwrapped
-80/tcp   open  tcpwrapped
+PORT     STATE SERVICE  VERSION
+53/tcp   open  domain   (generic dns response: NOTIMP)
+80/tcp   open  http     nginx 1.27.5
 |_http-server-header: nginx/1.27.5
-81/tcp   open  tcpwrapped
-443/tcp  open  tcpwrapped
-|_ssl-date: TLS randomness does not represent time
+|_http-title: Did not follow redirect to https://pentest-ground.com
+81/tcp   open  ssl/http nginx 1.27.5
 |_http-server-header: nginx/1.27.5
 | ssl-cert: Subject: commonName=pentest-ground.com
 | Subject Alternative Name: DNS:pentest-ground.com
 | Not valid before: 2025-03-30T09:55:50
 |_Not valid after:  2025-06-28T09:55:49
-4445/tcp open  tcpwrapped
-9000/tcp open  tcpwrapped
+| http-cookie-flags: 
+|   /: 
+|     SessionID: 
+|_      httponly flag not set
+|_http-title:  
+|_ssl-date: TLS randomness does not represent time
+443/tcp  open  ssl/http nginx 1.27.5
+|_http-title: Pentest-Ground
+|_http-server-header: nginx/1.27.5
+| ssl-cert: Subject: commonName=pentest-ground.com
+| Subject Alternative Name: DNS:pentest-ground.com
+| Not valid before: 2025-03-30T09:55:50
+|_Not valid after:  2025-06-28T09:55:49
+|_ssl-date: TLS randomness does not represent time
+4445/tcp open  ssh      OpenSSH 8.4p1 Debian 5+deb11u5 (protocol 2.0)
+| ssh-hostkey: 
+|   3072 14:20:68:34:e9:b9:96:ae:d5:f1:96:8f:d7:c4:e9:99 (RSA)
+|   256 24:26:04:22:1b:67:fd:12:bb:ed:f4:91:d7:e8:03:5c (ECDSA)
+|_  256 d0:75:67:4e:53:14:6f:8a:28:c0:43:b2:13:7e:4f:4a (ED25519)
+9000/tcp open  ssl/http nginx 1.27.5
+|_ssl-date: TLS randomness does not represent time
+|_http-title: Vulnerable REST API
+| ssl-cert: Subject: commonName=pentest-ground.com
+| Subject Alternative Name: DNS:pentest-ground.com
+| Not valid before: 2025-03-30T09:55:50
+|_Not valid after:  2025-06-28T09:55:49
+|_http-server-header: nginx/1.27.5
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+SF-Port53-TCP:V=7.95%I=7%D=5/16%Time=682736E0%P=x86_64-pc-linux-gnu%r(DNSV
+SF:ersionBindReqTCP,E,"\0\x0c\0\x06\x81\x84\0\0\0\0\0\0\0\0");
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Nmap scan report for pentest-ground.com (178.79.134.182)
+Host is up (0.061s latency).
+rDNS record for 178.79.134.182: 178-79-134-182.ip.linodeusercontent.com
+Not shown: 994 filtered tcp ports (no-response)
+PORT     STATE SERVICE  VERSION
+53/tcp   open  domain   (generic dns response: NOTIMP)
+80/tcp   open  http     nginx 1.27.5
+|_http-server-header: nginx/1.27.5
+|_http-title: Did not follow redirect to https://pentest-ground.com
+81/tcp   open  ssl/http nginx 1.27.5
+|_ssl-date: TLS randomness does not represent time
+| ssl-cert: Subject: commonName=pentest-ground.com
+| Subject Alternative Name: DNS:pentest-ground.com
+| Not valid before: 2025-03-30T09:55:50
+|_Not valid after:  2025-06-28T09:55:49
+|_http-server-header: nginx/1.27.5
+|_http-title:  
+| http-cookie-flags: 
+|   /: 
+|     SessionID: 
+|_      httponly flag not set
+443/tcp  open  ssl/http nginx 1.27.5
+| ssl-cert: Subject: commonName=pentest-ground.com
+| Subject Alternative Name: DNS:pentest-ground.com
+| Not valid before: 2025-03-30T09:55:50
+|_Not valid after:  2025-06-28T09:55:49
+|_ssl-date: TLS randomness does not represent time
+|_http-server-header: nginx/1.27.5
+|_http-title: Pentest-Ground
+4445/tcp open  ssh      OpenSSH 8.4p1 Debian 5+deb11u5 (protocol 2.0)
+| ssh-hostkey: 
+|   3072 14:20:68:34:e9:b9:96:ae:d5:f1:96:8f:d7:c4:e9:99 (RSA)
+|   256 24:26:04:22:1b:67:fd:12:bb:ed:f4:91:d7:e8:03:5c (ECDSA)
+|_  256 d0:75:67:4e:53:14:6f:8a:28:c0:43:b2:13:7e:4f:4a (ED25519)
+9000/tcp open  ssl/http nginx 1.27.5
+|_ssl-date: TLS randomness does not represent time
+|_http-title: Vulnerable REST API
+| ssl-cert: Subject: commonName=pentest-ground.com
+| Subject Alternative Name: DNS:pentest-ground.com
+| Not valid before: 2025-03-30T09:55:50
+|_Not valid after:  2025-06-28T09:55:49
+|_http-server-header: nginx/1.27.5
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+SF-Port53-TCP:V=7.95%I=7%D=5/16%Time=68273732%P=x86_64-pc-linux-gnu%r(DNSV
+SF:ersionBindReqTCP,E,"\0\x0c\0\x06\x81\x84\0\0\0\0\0\0\0\0");
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-# Nmap done at Fri May 16 05:33:21 2025 -- 1 IP address (1 host up) scanned in 49.99 seconds
+# Nmap done at Fri May 16 09:01:53 2025 -- 2 IP addresses (2 hosts up) scanned in 162.16 seconds

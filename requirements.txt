@@ -1,10 +1,5 @@
 # Core dependencies
-numpy
-pandas
-scikit-learn
-tensorflow
-torch
-transformers
+
 gensim
 
 # AI and LLM
@@ -16,10 +11,6 @@ beautifulsoup4
 fastapi
 uvicorn
 
-# Network scanning and DNS tools
-python-nmap>=0.7.1
-dnspython>=2.6.0
-
 # Security tools interfaces
 pyyaml>=6.0.1
 
@@ -28,8 +19,8 @@ sqlalchemy
 pymongo
 
 # Utilities
-python-dotenv>=1.0.0
-colorlog>=6.8.0
+python-dotenv
+colorlog
 streamlit
 grpcio
 pyzmq
