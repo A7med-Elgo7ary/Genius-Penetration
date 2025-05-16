@@ -1,31 +1,38 @@
-# Core dependencies
+# requirements.txt
 
-gensim
-
-# AI and LLM
-google-generativeai
-
-# Web and API
-requests
-beautifulsoup4
+# Core Web/API Frameworks
 fastapi
-uvicorn
+Flask
+uvicorn 
 
-# Security tools interfaces
-pyyaml>=6.0.1
+# Data Parsing & Handling
+beautifulsoup4
+gensim
+pyyaml
 
 # Database
-sqlalchemy
 pymongo
+sqlalchemy
+
+# DNS & Network
+dnspython
+
+# Generative AI
+google-generativeai
+
+# Reporting & Templating
+jinja2>=3.1.0
+markdown>=3.6.0
+reportlab
+
+# Security tools interfaces
+python-owasp-zap-v2.4 # ZAP API client, already listed, just confirming category
+
+# UI / Interactive
+streamlit
 
 # Utilities
-python-dotenv
 colorlog
-streamlit
 grpcio
+python-dotenv
 pyzmq
-
-# Reporting
-jinja2>=3.1.0
-reportlab
-markdown>=3.6.0
