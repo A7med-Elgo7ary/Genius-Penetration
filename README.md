@@ -1,6 +1,3 @@
-Certainly! Here's a **creative and professional README.md** for your GitHub project, tailored to the **AI-PenTest Agents** system you've described:
-
----
 
 # 🤖 AI-PenTest Agents: Autonomous Penetration Testing System
 
@@ -69,7 +66,7 @@ AI_PenTest_Agent/
 
 - Kali Linux 2025 (or any Linux system with Python 3.10+)
 - Docker (for containerized components)
-- Internet access for API keys (Shodan, VirusTotal, OpenAI, etc.)
+- Internet access for API keys (Shodan, VirusTotal, OpenAI, Gemini )
 
 ### Installation
 
@@ -122,8 +119,7 @@ MIT License – see [LICENSE](LICENSE)
 
 ## 👥 Authors
 
-- **Ahmed El Mahdawy** – Lead Developer & Architect  
-- **Team AI-PenTest** – Security Researchers & AI Engineers
+
 
 ---
 
@@ -131,9 +127,6 @@ MIT License – see [LICENSE](LICENSE)
 
 Have feedback, suggestions, or want to collaborate? Reach out via:
 
-- Email: aelmahdawy@example.com
-- LinkedIn: [linkedin.com/in/aelmahdawy](https://linkedin.com/in/aelmahdawy)
-- Twitter: [@AI_PenTester](https://twitter.com/AI_PenTester)
 
 ---
 
@@ -150,4 +143,3 @@ Let the AI do the heavy lifting — while you focus on strategy and insight.
 
 --- 
 
-Would you like me to provide this as a downloadable `.md` file or generate a `requirements.txt`, `.env.example`, or `config.yaml` template as well?
