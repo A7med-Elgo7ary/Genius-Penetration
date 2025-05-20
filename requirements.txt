@@ -36,3 +36,6 @@ colorlog
 grpcio
 python-dotenv
 pyzmq
+
+# Exploitation
+pymetasploit3

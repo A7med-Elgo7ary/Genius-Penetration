@@ -33,7 +33,6 @@ class ReconLLMInterface:
         # Default generation config
         self.generation_config = GenerationConfig(
             temperature=0.2,
-            top_p=0.95,
             top_k=40,
             max_output_tokens=8192,
         )
