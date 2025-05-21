@@ -1,3 +1,6 @@
+vulners # Vulnerability database API client
+
+
 # requirements.txt
 
 # Core Web/API Frameworks
@@ -27,7 +30,6 @@ reportlab
 
 # Security tools interfaces
 python-owasp-zap-v2.4 # ZAP API client, already listed, just confirming category
-
 # UI / Interactive
 streamlit
 

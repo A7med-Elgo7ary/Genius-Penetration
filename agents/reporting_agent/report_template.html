@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-PenTest Agents | Penetration Testing Report</title>
+    <style>
+        :root {
+            --primary-bg: #0a0e17;
+            --secondary-bg: #121a29;
+            --tertiary-bg: #1e2a3a;
+            --accent-color: #00ff9d;
+            --second-accent: #00b7ff;
+            --danger-color: #ff3e3e;
+            --warning-color: #ffae00;
+            --info-color: #3498db;
+            --success-color: #2ecc71;
+            --text-color: #e6e6e6;
+            --secondary-text: #a0a0a0;
+            --border-color: #2a3a4a;
+            --grid-line-color: rgba(0, 255, 157, 0.1);
+            --terminal-bg: #0c1016;
+            --terminal-text: #00ff9d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(to right, var(--grid-line-color) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--grid-line-color) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* Cyberpunk scanner animation on page load */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--accent-color);
+            z-index: 1000;
+            box-shadow: 0 0 15px var(--accent-color);
+            animation: scanner 3s ease-in-out infinite;
+        }
+
+        @keyframes scanner {
+            0% { transform: translateY(-5px); }
+            50% { transform: translateY(100vh); }
+            100% { transform: translateY(-5px); }
+        }
+
+        header {
+            background-color: var(--secondary-bg);
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--accent-color);
+            box-shadow: 0 4px 20px rgba(0, 255, 157, 0.15);
+            position: relative;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--accent-color);
+            border-radius: 50%;
+            font-size: 20px;
+            color: var(--accent-color);
+            text-shadow: 0 0 5px var(--accent-color);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            text-shadow: 0 0 5px var(--accent-color), 0 0 10px rgba(0, 255, 157, 0.2);
+        }
+
+        .report-meta {
+            text-align: right;
+            font-size: 0.9rem;
+            color: var(--secondary-text);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .summary-section {
+            background-color: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-color);
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+
+        .summary-section h2 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .summary-section h2::before {
+            content: '>';
+            color: var(--accent-color);
+        }
+
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+
+        .glitch-text::before {
+            color: var(--danger-color);
+            z-index: -1;
+            animation: glitch-animation 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+            animation-delay: 0.1s;
+        }
+
+        .glitch-text::after {
+            color: var(--second-accent);
+            z-index: -2;
+            animation: glitch-animation 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+            animation-delay: 0.2s;
+        }
+
+        @keyframes glitch-animation {
+            0% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-3px, 3px);
+            }
+            40% {
+                transform: translate(-3px, -3px);
+            }
+            60% {
+                transform: translate(3px, 3px);
+            }
+            80% {
+                transform: translate(3px, -3px);
+            }
+            to {
+                transform: translate(0);
+            }
+        }
+
+        .vuln-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .vuln-card {
+            background-color: var(--tertiary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 1rem;
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .vuln-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 255, 157, 0.15);
+        }
+
+        .vuln-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+        }
+
+        .vuln-card.critical::before {
+            background: var(--danger-color);
+            box-shadow: 0 0 10px var(--danger-color);
+        }
+
+        .vuln-card.high::before {
+            background: var(--warning-color);
+            box-shadow: 0 0 10px var(--warning-color);
+        }
+
+        .vuln-card.medium::before {
+            background: var(--info-color);
+            box-shadow: 0 0 10px var(--info-color);
+        }
+
+        .vuln-card.low::before {
+            background: var(--success-color);
+            box-shadow: 0 0 10px var(--success-color);
+        }
+
+        .vuln-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .vuln-title h3 {
+            font-size: 1.1rem;
+        }
+
+        .severity-badge {
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .severity-badge.critical {
+            background-color: rgba(255, 62, 62, 0.2);
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+        }
+
+        .severity-badge.high {
+            background-color: rgba(255, 174, 0, 0.2);
+            color: var(--warning-color);
+            border: 1px solid var(--warning-color);
+        }
+
+        .severity-badge.medium {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: var(--info-color);
+            border: 1px solid var(--info-color);
+        }
+
+        .severity-badge.low {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .vuln-description {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .affected-components {
+            font-size: 0.8rem;
+            color: var(--secondary-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .recommendation {
+            font-size: 0.9rem;
+            color: var(--accent-color);
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-color) var(--tertiary-bg);
+        }
+
+        .tabs::-webkit-scrollbar {
+            height: 5px;
+        }
+
+        .tabs::-webkit-scrollbar-track {
+            background: var(--tertiary-bg);
+        }
+
+        .tabs::-webkit-scrollbar-thumb {
+            background-color: var(--accent-color);
+            border-radius: 10px;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--secondary-text);
+            cursor: pointer;
+            font-size: 1rem;
+            position: relative;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-color);
+            background-color: rgba(0, 255, 157, 0.05);
+        }
+
+        .tab-btn.active {
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .recommendations-list {
+            list-style-type: none;
+        }
+
+        .recommendation-item {
+            background-color: var(--tertiary-bg);
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .recommendation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .recommendation-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .priority-badge {
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .priority-badge.high {
+            background-color: rgba(255, 62, 62, 0.2);
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+        }
+
+        .priority-badge.medium {
+            background-color: rgba(255, 174, 0, 0.2);
+            color: var(--warning-color);
+            border: 1px solid var(--warning-color);
+        }
+
+        .priority-badge.low {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: var(--info-color);
+            border: 1px solid var(--info-color);
+        }
+
+        .recommendation-description {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .implementation-steps {
+            font-size: 0.9rem;
+            padding-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .implementation-steps li {
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric-card {
+            background-color: var(--tertiary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, var(--accent-color), var(--second-accent));
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 5px rgba(0, 255, 157, 0.3);
+        }
+
+        .metric-title {
+            font-size: 0.9rem;
+            color: var(--secondary-text);
+        }
+
+        .findings-list {
+            background-color: var(--tertiary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .finding-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .finding-item:last-child {
+            border-bottom: none;
+        }
+
+        .terminal-output {
+            background-color: var(--terminal-bg);
+            color: var(--terminal-text);
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            margin-top: 1rem;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        .terminal-output::before {
+            content: '$ ./output.sh';
+            display: block;
+            color: var(--secondary-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .network-map {
+            width: 100%;
+            height: 350px;
+            background-color: var(--tertiary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin-top: 1rem;
+            position: relative;
+        }
+
+        .map-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--secondary-text);
+            text-align: center;
+        }
+
+        .map-node {
+            width: 12px;
+            height: 12px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 0 5px var(--accent-color);
+        }
+
+        .correlation-item {
+            background-color: var(--tertiary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .correlation-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--second-accent);
+            box-shadow: 0 0 10px var(--second-accent);
+        }
+
+        .correlation-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--second-accent);
+        }
+
+        .correlation-details {
+            font-size: 0.9rem;
+        }
+
+        .loading-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 14, 23, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid transparent;
+            border-top-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-spinner::before,
+        .loading-spinner::after {
+            content: '';
+            position: absolute;
+            border: 3px solid transparent;
+            border-radius: 50%;
+        }
+
+        .loading-spinner::before {
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border-top-color: var(--second-accent);
+            animation: spin 2s linear infinite;
+        }
+
+        .loading-spinner::after {
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border-top-color: var(--danger-color);
+            animation: spin 1.5s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 1.5rem;
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px var(--accent-color);
+            letter-spacing: 2px;
+        }
+
+        .error-message {
+            background-color: rgba(255, 62, 62, 0.1);
+            border: 1px solid var(--danger-color);
+            border-radius: 4px;
+            padding: 1rem;
+            margin-top: 1rem;
+            color: var(--danger-color);
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .error-message::before {
+            content: '⚠';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+
+        .data-timestamp {
+            font-size: 0.8rem;
+            color: var(--secondary-text);
+            margin-top: 0.5rem;
+            text-align: right;
+        }
+
+        @media (max-width: 768px) {
+            .vuln-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .metric-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .report-meta {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container" id="loadingContainer">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">ANALYZING SECURITY DATA</div>
+    </div>
+
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">&#9632;</div>
+                <div class="logo-text">AI-PenTest Agents</div>
+            </div>
+            <div class="report-meta">
+                <div>Penetration Test Report</div>
+                <div id="reportDate">Report Date: Loading...</div>
+                <div id="targetName">Target: Loading...</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="summary-section">
+            <h2>Executive Summary</h2>
+            <p id="executiveSummary">Loading executive summary...</p>
+        </div>
+
+        <div class="tabs" id="tabsContainer">
+            <button class="tab-btn active" data-tab="overview">Overview</button>
+            <button class="tab-btn" data-tab="reconnaissance">Reconnaissance</button>
+            <button class="tab-btn" data-tab="vulnerability-scan">Vulnerability Scan</button>
+            <button class="tab-btn" data-tab="vulnerability-analysis">Vulnerability Analysis</button>
+            <button class="tab-btn" data-tab="exploitation">Exploitation</button>
+            <button class="tab-btn" data-tab="post-exploitation">Post-Exploitation</button>
+            <button class="tab-btn" data-tab="blue-team">Blue Team</button>
+            <button class="tab-btn" data-tab="recommendations">Recommendations</button>
+            <button class="tab-btn" data-tab="correlations">Correlations</button>
+        </div>
+
+        <div class="tab-content active" id="overview">
+            <div class="metric-grid" id="overviewMetrics">
+                <!-- Metrics will be loaded here dynamically -->
+            </div>
+            
+            <div class="summary-section">
+                <h2>Vulnerability Summary</h2>
+                <div class="vuln-grid" id="vulnerabilitiesOverview">
+                    <!-- Vulnerabilities will be loaded here dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="reconnaissance">
+            <div class="summary-section">
+                <h2>Reconnaissance Summary</h2>
+                <p id="reconSummary">Loading reconnaissance summary...</p>
+                
+                <div class="network-map" id="networkMap">
+                    <div class="map-placeholder">
+                        <p>Network map visualization</p>
+                        <p>(Generated from reconnaissance data)</p>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 1.5rem; font-size: 1.1rem; color: var(--accent-color);">Key Findings</h3>
+                <div class="findings-list" id="reconFindings">
+                    <!-- Recon findings will be loaded here dynamically -->
+                </div>
+                
+                <div class="terminal-output" id="reconOutput">
+                    # Reconnaissance output will appear here
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="vulnerability-scan">
+            <div class="summary-section">
+                <h2>Vulnerability Scanning Summary</h2>
+                <p id="vulnScanSummary">Loading vulnerability scanning summary...</p>
+                
+                <h3 style="margin-top: 1.5rem; font-size: 1.1rem; color: var(--accent-color);">Key Findings</h3>
+                <div class="findings-list" id="vulnScanFindings">
+                    <!-- Vulnerability scan findings will be loaded here dynamically -->
+                </div>
+                
+                <div class="terminal-output" id="vulnScanOutput">
+                    # Vulnerability scanning output will appear here
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="vulnerability-analysis">
+            <div class="summary-section">
+                <h2>Vulnerability Analysis Summary</h2>
+                <p id="vulnAnalysisSummary">Loading vulnerability analysis summary...</p>
+                
+                <h3 style="margin-top: 1.5rem; font-size: 1.1rem; color: var(--accent-color);">Identified Vulnerabilities</h3>
+                <div class="vuln-grid" id="vulnerabilitiesList">
+                    <!-- Vulnerabilities will be loaded here dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="exploitation">
+            <div class="summary-section">
+                <h2>Exploitation Summary</h2>
+                <p id="exploitSummary">Loading exploitation summary...</p>
+                
+                <h3 style="margin-top: 1.5rem; font-size: 1.1rem; color: var(--accent-color);">Key Findings</h3>
+                <div class="findings-list" id="exploitFindings">
+                    <!-- Exploitation findings will be loaded here dynamically -->
+                </div>
+                
+                <div class="terminal-output" id="exploitOutput">
+                    # Exploitation output will appear here
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="post-exploitation">
+            <div class="summary-section">
+                <h2>Post-Exploitation Summary</h2>
+                <p id="postExploitSummary">Loading post-exploitation summary...</p>
+                
+                <h3 style="margin-top: 1.5rem; font-size: 1.1rem; color: var(--accent-color);">Key Findings</h3>
+                <div class="findings-list" id="postExploitFindings">
+                    <!-- Post-exploitation findings will be loaded here dynamically -->
+                </div>
+                
+                <div class="terminal-output" id="postExploitOutput">
+                    # Post-exploitation output will appear here
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="blue-team">
+            <div class="summary-section">
+                <h2>Blue Team Findings</h2>
+                <p id="blueTeamSummary">Loading blue team summary...</p>
+                
+                <h3 style="margin-top: 1.5rem; font-size: 1.1rem; color: var(--accent-color);">Detection Summary</h3>
+                <div class="findings-list" id="blueTeamFindings">
+                    <!-- Blue team findings will be loaded here dynamically -->
+                </div>
+                
+                <div class="terminal-output" id="blueTeamOutput">
+                    # Blue team detection output will appear here
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="recommendations">
+            <div class="summary-section">
+                <h2>Recommendations</h2>
+                <ul class="recommendations-list" id="recommendationsList">
+                    <!-- Recommendations will be loaded here dynamically -->
+                </ul>
+            </div>
+        </div>
+
+        <div class="tab-content" id="correlations">
+            <div class="summary-section">
+                <h2>Correlations & Attack Paths</h2>
+                <p>The following sections highlight relationships between different findings, showing potential attack paths and security context.</p>
+                
+                <div id="correlationsList">
+                    <!-- Correlations will be loaded here dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Show loading screen
+        document.getElementById('loadingContainer').style.display = 'flex';
+
+        // Define severity classes
+        const severityClasses = {
+            'Critical': 'critical',
+            'High': 'high',
+            'Medium': 'medium',
+            'Low': 'low'
+        };
+
+        // Tab switching functionality
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Add active class to clicked tab
+                button.classList.add('active');
+                document.getElementById(button.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Fetch and process report data
+        async function loadReportData() {
+            try {
+                const response = await fetch('output/report.json');
+                if (!response.ok) {
+                    throw new Error(`Failed to load report data. Status: ${response.status}`);
+                }
+                
+                const reportData = await response.json();
+                
+                // Check if report has an error status
+                if (reportData.status === 'error') {
+                    handleErrorReport(reportData);
+                    return;
+                }
+                
+                // Populate report metadata
+                document.getElementById('reportDate').textContent = `Report Date: ${formatDate(reportData.metadata?.report_generated || new Date().toISOString())}`;
+                document.getElementById('targetName').textContent = `Target: ${getTargetName(reportData)}`;
+                
+                // Populate executive summary
+                document.getElementById('executiveSummary').textContent = reportData.executive_summary || 'No executive summary available.';
+                
+                // Populate overview metrics
+                populateOverviewMetrics(reportData);
+                
+                // Populate vulnerabilities overview
+                populateVulnerabilities(reportData.vulnerabilities || [], 'vulnerabilitiesOverview');
+                populateVulnerabilities(reportData.vulnerabilities || [], 'vulnerabilitiesList');
+                
+                // Populate agent summaries
+                const agentSummaries = reportData.agent_summaries || {};
+                
+                // Reconnaissance
+                if (agentSummaries.reconnaissance) {
+                    document.getElementById('reconSummary').textContent = agentSummaries.reconnaissance.summary || 'No reconnaissance summary available.';
+                    populateFindings(agentSummaries.reconnaissance.key_findings || [], 'reconFindings');
+                    simulateNetworkMap();
+                }
+                
+                // Vulnerability Scanning
+                if (agentSummaries.vulnerability_scan) {
+                    document.getElementById('vulnScanSummary').textContent = agentSummaries.vulnerability_scan.summary || 'No vulnerability scanning summary available.';
+                    populateFindings(agentSummaries.vulnerability_scan.key_findings || [], 'vulnScanFindings');
+                }
+                
+                // Vulnerability Analysis
+                if (agentSummaries.vulnerability_analysis) {
+                    document.getElementById('vulnAnalysisSummary').textContent = agentSummaries.vulnerability_analysis.summary || 'No vulnerability analysis summary available.';
+                }
+                
+                // Exploitation
+                if (agentSummaries.exploitation) {
+                    document.getElementById('exploitSummary').textContent = agentSummaries.exploitation.summary || 'No exploitation summary available.';
+                    populateFindings(agentSummaries.exploitation.key_findings || [], 'exploitFindings');
+                }
+                
+                // Post-Exploitation
+                if (agentSummaries.post_exploitation) {
+                    document.getElementById('postExploitSummary').textContent = agentSummaries.post_exploitation.summary || 'No post-exploitation summary available.';
+                    populateFindings(agentSummaries.post_exploitation.key_findings || [], 'postExploitFindings');
+                }
+                
+                // Blue Team
+                if (agentSummaries.blue_team) {
+                    document.getElementById('blueTeamSummary').textContent = agentSummaries.blue_team.summary || 'No blue team summary available.';
+                    populateFindings(agentSummaries.blue_team.key_findings || [], 'blueTeamFindings');
+                }
+                
+                // Populate recommendations
+                populateRecommendations(reportData.recommendations || []);
+                
+                // Populate correlations
+                populateCorrelations(reportData.correlations || []);
+                
+                // Simulate terminal outputs
+                simulateTerminalOutputs(reportData);
+                
+            } catch (error) {
+                console.error('Error loading report data:', error);
+                // Display error message
+                document.getElementById('executiveSummary').innerHTML = `
+                    <div class="error-message">
+                        Failed to load report data. Error: ${error.message}
+                    </div>
+                `;
+            } finally {
+                // Hide loading screen
+                document.getElementById('loadingContainer').style.display = 'none';
+            }
+        }
+
+        // Handle error report
+        function handleErrorReport(errorData) {
+            document.getElementById('executiveSummary').innerHTML = `
+                <div class="error-message">
+                    ${errorData.message || 'An error occurred while generating the report.'}
+                </div>
+            `;
+            
+            // Hide loading screen
+            document.getElementById('loadingContainer').style.display = 'none';
+        }
+
+        // Format date string
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString();
+        }
+
+        // Get target name from report data
+        function getTargetName(reportData) {
+            // Try to extract target from raw data or use fallback
+            try {
+                if (reportData.raw_data && reportData.raw_data.reconnaissance) {
+                    return reportData.raw_data.reconnaissance.target || 'Unknown Target';
+                }
+            } catch (e) {
+                console.error('Error extracting target name:', e);
+            }
+            return 'Target System';
+        }
+
+        // Populate overview metrics
+        function populateOverviewMetrics(reportData) {
+            const metrics = [
+                { 
+                    title: 'Total Vulnerabilities', 
+                    value: (reportData.vulnerabilities || []).length 
+                },
+                { 
+                    title: 'Critical Severity', 
+                    value: (reportData.vulnerabilities || []).filter(v => v.severity === 'Critical').length 
+                },
+                { 
+                    title: 'High Severity', 
+                    value: (reportData.vulnerabilities || []).filter(v => v.severity === 'High').length 
+                },
+                { 
+                    title: 'Medium Severity', 
+                    value: (reportData.vulnerabilities || []).filter(v => v.severity === 'Medium').length 
+                },
+                { 
+                    title: 'Low Severity', 
+                    value: (reportData.vulnerabilities || []).filter(v => v.severity === 'Low').length 
+                },
+                { 
+                    title: 'Exploited', 
+                    value: countExploitedVulnerabilities(reportData) 
+                }
+            ];
+            
+            const metricsContainer = document.getElementById('overviewMetrics');
+            metricsContainer.innerHTML = '';
+            
+            metrics.forEach(metric => {
+                const metricCard = document.createElement('div');
+                metricCard.className = 'metric-card';
+                metricCard.innerHTML = `
+                    <div class="metric-value">${metric.value}</div>
+                    <div class="metric-title">${metric.title}</div>
+                `;
+                metricsContainer.appendChild(metricCard);
+            });
+        }
+
+        // Count exploited vulnerabilities
+        function countExploitedVulnerabilities(reportData) {
+            try {
+                if (reportData.raw_data && reportData.raw_data.exploitation) {
+                    const exploitData = reportData.raw_data.exploitation;
+                    if (Array.isArray(exploitData.successful_exploits)) {
+                        return exploitData.successful_exploits.length;
+                    }
+                    return '?';
+                }
+                return '?';
+            } catch (e) {
+                return '?';
+            }
+        }
+
+        // Populate vulnerabilities
+        function populateVulnerabilities(vulnerabilities, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            if (vulnerabilities.length === 0) {
+                container.innerHTML = '<div class="error-message">No vulnerabilities found in the report data.</div>';
+                return;
+            }
+            
+            vulnerabilities.forEach(vuln => {
+                const vulnCard = document.createElement('div');
+                vulnCard.className = `vuln-card ${severityClasses[vuln.severity] || 'medium'}`;
+                
+                vulnCard.innerHTML = `
+                    <div class="vuln-title">
+                        <h3>${vuln.name || 'Unnamed Vulnerability'}</h3>
+                        <span class="severity-badge ${severityClasses[vuln.severity] || 'medium'}">${vuln.severity || 'Unknown'}</span>
+                    </div>
+                    <p class="vuln-description">${vuln.description || 'No description available.'}</p>
+                    <div class="affected-components">
+                        <strong>Affected:</strong> ${vuln.affected_components ? vuln.affected_components.join(', ') : 'Unknown'}
+                    </div>
+                    <div class="recommendation">
+                        <strong>Recommendation:</strong> ${vuln.recommendation || 'No recommendation available.'}
+                    </div>
+                `;
+                
+                container.appendChild(vulnCard);
+            });
+        }
+
+        // Populate findings
+        function populateFindings(findings, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            if (findings.length === 0) {
+                container.innerHTML = '<div class="finding-item">No findings available.</div>';
+                return;
+            }
+            
+            findings.forEach(finding => {
+                const findingItem = document.createElement('div');
+                findingItem.className = 'finding-item';
+                findingItem.textContent = finding;
+                container.appendChild(findingItem);
+            });
+        }
+
+        // Populate recommendations
+        function populateRecommendations(recommendations) {
+            const container = document.getElementById('recommendationsList');
+            container.innerHTML = '';
+            
+            if (recommendations.length === 0) {
+                container.innerHTML = '<div class="error-message">No recommendations available in the report data.</div>';
+                return;
+            }
+            
+            recommendations.forEach(rec => {
+                const recItem = document.createElement('li');
+                recItem.className = 'recommendation-item';
+                
+                let priorityClass = 'medium';
+                if (rec.priority === 'High') priorityClass = 'high';
+                else if (rec.priority === 'Low') priorityClass = 'low';
+                
+                recItem.innerHTML = `
+                    <div class="recommendation-header">
+                        <div class="recommendation-title">${rec.title || 'Unnamed Recommendation'}</div>
+                        <span class="priority-badge ${priorityClass}">${rec.priority || 'Medium'}</span>
+                    </div>
+                    <p class="recommendation-description">${rec.description || 'No description available.'}</p>
+                    ${rec.implementation_steps && rec.implementation_steps.length > 0 ? `
+                        <ol class="implementation-steps">
+                            ${rec.implementation_steps.map(step => `<li>${step}</li>`).join('')}
+                        </ol>
+                    ` : ''}
+                `;
+                
+                container.appendChild(recItem);
+            });
+        }
+
+        // Populate correlations
+        function populateCorrelations(correlations) {
+            const container = document.getElementById('correlationsList');
+            container.innerHTML = '';
+            
+            if (correlations.length === 0) {
+                container.innerHTML = '<div class="error-message">No correlations found in the report data.</div>';
+                return;
+            }
+            
+            correlations.forEach(correlation => {
+                const correlationItem = document.createElement('div');
+                correlationItem.className = 'correlation-item';
+                
+                correlationItem.innerHTML = `
+                    <div class="correlation-title">Correlation: ${correlation.finding_1} ↔ ${correlation.finding_2}</div>
+                    <div class="correlation-details">${correlation.relationship || 'No relationship description available.'}</div>
+                `;
+                
+                container.appendChild(correlationItem);
+            });
+        }
+
+        // Simulate network map (just visual placeholder)
+        function simulateNetworkMap() {
+            const map = document.getElementById('networkMap');
+            
+            // Clear previous nodes
+            map.querySelectorAll('.map-node').forEach(node => node.remove());
+            
+            // Generate random nodes
+            for (let i = 0; i < 20; i++) {
+                const node = document.createElement('div');
+                node.className = 'map-node';
+                node.style.left = `${10 + Math.random() * 80}%`;
+                node.style.top = `${10 + Math.random() * 80}%`;
+                map.appendChild(node);
+            }
+        }
+
+        // Simulate terminal outputs
+        function simulateTerminalOutputs(reportData) {
+            // Recon terminal output
+            document.getElementById('reconOutput').textContent = generateTerminalOutput('recon');
+            
+            // Vulnerability scan terminal output
+            document.getElementById('vulnScanOutput').textContent = generateTerminalOutput('vuln_scan');
+            
+            // Exploitation terminal output
+            document.getElementById('exploitOutput').textContent = generateTerminalOutput('exploit');
+            
+            // Post-exploitation terminal output
+            document.getElementById('postExploitOutput').textContent = generateTerminalOutput('post_exploit');
+            
+            // Blue team terminal output
+            document.getElementById('blueTeamOutput').textContent = generateTerminalOutput('blue_team');
+        }
+
+        // Generate fake terminal output based on section
+        function generateTerminalOutput(section) {
+            const outputs = {
+                recon: `# Reconnaissance Results Summary
+[+] Domains discovered: 3
+[+] Subdomains discovered: 17
+[+] IP addresses mapped: 5
+[+] Open ports discovered: 24
+[+] Services identified: 8
+[+] Email addresses gathered: 12
+[+] Technologies detected: Apache, PHP, MySQL, WordPress`,
+
+                vuln_scan: `# Vulnerability Scanning Results
+[+] Host scan completed successfully
+[+] Web application scan completed
+[+] Found 3 potentially critical vulnerabilities
+[+] Found 7 high severity issues
+[+] Found 12 medium severity issues
+[+] Found 9 low severity issues`,
+
+                exploit: `# Exploitation Results
+[+] Attempting exploit for CVE-2023-xxxx
+[+] Exploit successful! Gained access to admin panel
+[+] Extracting user credentials
+[+] Found 3 administrator accounts
+[+] Privileges escalated successfully`,
+
+                post_exploit: `# Post-Exploitation Results
+[+] Established persistent access
+[+] Extracted credential database
+[+] Located sensitive customer data
+[+] Discovered internal network map
+[+] Found unencrypted configuration files with credentials
+[+] Successfully moved laterally to 2 additional systems`,
+
+                blue_team: `# Blue Team Detection Results
+[+] Detected suspicious login attempts
+[+] Identified unusual file access patterns
+[+] Detected potential data exfiltration
+[+] Found evidence of credential harvesting
+[+] Triggered 5 high-priority alerts
+[+] Detected lateral movement attempt`
+            };
+            
+            return outputs[section] || '# No output available';
+        }
+
+        // Load report data on page load
+        window.addEventListener('DOMContentLoaded', loadReportData);
+    </script>
+</body>
+</html>
