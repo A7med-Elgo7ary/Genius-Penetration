@@ -1,6 +1,4 @@
-# Nmap 7.95 scan initiated Fri May 16 08:59:11 2025 as: /usr/lib/nmap/nmap --privileged -sV -sC -oA nmap_scan 178.79.134.182 pentest-ground.com
+# Nmap 7.95 scan initiated Wed May 21 03:49:56 2025 as: /usr/lib/nmap/nmap --privileged -sV -sC -oA nmap_scan pentest-ground.com
 Host: 178.79.134.182 (178-79-134-182.ip.linodeusercontent.com)	Status: Up
-Host: 178.79.134.182 (178-79-134-182.ip.linodeusercontent.com)	Ports: 53/open/tcp//domain//(generic dns response: NOTIMP)/, 80/open/tcp//http//nginx 1.27.5/, 81/open/tcp//ssl|http//nginx 1.27.5/, 443/open/tcp//ssl|http//nginx 1.27.5/, 4445/open/tcp//ssh//OpenSSH 8.4p1 Debian 5+deb11u5 (protocol 2.0)/, 9000/open/tcp//ssl|http//nginx 1.27.5/	Ignored State: filtered (994)
-Host: 178.79.134.182 (178-79-134-182.ip.linodeusercontent.com)	Status: Up
-Host: 178.79.134.182 (178-79-134-182.ip.linodeusercontent.com)	Ports: 53/open/tcp//domain//(generic dns response: NOTIMP)/, 80/open/tcp//http//nginx 1.27.5/, 81/open/tcp//ssl|http//nginx 1.27.5/, 443/open/tcp//ssl|http//nginx 1.27.5/, 4445/open/tcp//ssh//OpenSSH 8.4p1 Debian 5+deb11u5 (protocol 2.0)/, 9000/open/tcp//ssl|http//nginx 1.27.5/	Ignored State: filtered (994)
-# Nmap done at Fri May 16 09:01:53 2025 -- 2 IP addresses (2 hosts up) scanned in 162.16 seconds
+Host: 178.79.134.182 (178-79-134-182.ip.linodeusercontent.com)	Ports: 80/open/tcp//http//nginx 1.27.5/, 81/open/tcp//ssl|http//nginx 1.27.5/, 113/closed/tcp//ident///, 443/open/tcp//ssl|http//nginx 1.27.5/, 2000/open/tcp//cisco-sccp?///, 4445/open/tcp//ssh//OpenSSH 8.4p1 Debian 5+deb11u5 (protocol 2.0)/, 5060/open/tcp//sip?///	Ignored State: filtered (993)
+# Nmap done at Wed May 21 03:55:52 2025 -- 1 IP address (1 host up) scanned in 355.55 seconds
